@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
-import { NativeBaseProvider, View, } from "native-base";
+import { NativeBaseProvider, View } from "native-base";
 
 // fonts
 import {
@@ -20,6 +20,8 @@ import { Provider } from "react-redux";
 import store, { persistor } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 
+import { RegisterDevice } from "./redux/middleware/DeviceMiddleware";
+
 // root navigator
 import RootNavigator from "./navigation/RootNavigator";
 // custom theme
@@ -27,7 +29,7 @@ import customTheme from "./customTheme";
 
 // notifications
 import * as Device from "expo-device";
-import Constants from "expo-constants";
+
 import * as Notifications from "expo-notifications";
 import { registerForPushNotificationsAsync } from "./config/registerForPushNotificationsAsync";
 
@@ -39,8 +41,6 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const EXPO_ID = Constants.manifest.id;
-
 export default function App() {
   const [appIsReady, setAppIsReady] = React.useState(false);
   const [expoPushToken, setExpoPushToken] = useState("");
@@ -48,13 +48,19 @@ export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  console.log(Device.deviceName, expoPushToken);
+
 
   // register for nofitcations
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) =>
       setExpoPushToken(token)
     );
+
+    // register for notifications
+    RegisterDevice({
+      deviceName: Device.deviceName,
+      deviceExpoPushToken: expoPushToken ? expoPushToken : "Simulator",
+    });
 
     // This listener is fired whenever a notification is received while the app is foregrounded
     notificationListener.current =
@@ -74,7 +80,7 @@ export default function App() {
       );
       Notifications.removeNotificationSubscription(responseListener.current);
     };
-  }, []);
+  }, [expoPushToken]);
 
   // splash screen app loading
   React.useEffect(() => {
@@ -116,11 +122,8 @@ export default function App() {
           theme={customTheme}
           colorModeManager={colorModeManager}
         >
-          <View
-            onLayout={onLayoutRootView}
-            style={{ flex: 1}}
-          >
-            <RootNavigator /> 
+          <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+            <RootNavigator />
           </View>
         </NativeBaseProvider>
       </PersistGate>

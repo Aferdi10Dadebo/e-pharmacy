@@ -1,7 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "@firebase/firestore";
+import { collection } from "@firebase/firestore";
 import { getAuth } from "@firebase/auth";
 import { getStorage } from "@firebase/storage";
+import { initializeFirestore } from 'firebase/firestore';
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyA7lOr0w8xoCNfn2WXBlsh4v2UO3OmeERg",
@@ -13,9 +15,29 @@ const firebaseConfig = {
   measurementId: "G-4HGPZD0VSK",
 };
 
+
 const app = initializeApp(firebaseConfig);
 
-// Get a reference to the database service
-export const db = getFirestore(app);
-export const auth = getAuth(app);
-export const storage = getStorage(app);
+// firebase services
+const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+});
+const auth = getAuth(app);
+const storage = getStorage(app);
+
+
+
+// collections 
+const DEVICES = "devices";
+
+
+// collection references
+const devicesRef = collection(db, DEVICES);
+
+
+export {
+  storage,
+  db,
+  DEVICES,
+  devicesRef,
+}
