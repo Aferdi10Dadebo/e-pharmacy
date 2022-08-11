@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "358241539069",
+    "project_id": "e-pharmacy-2475f",
+    "storage_bucket": "e-pharmacy-2475f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:358241539069:android:b298c285aa54dc394f7f94",
+        "android_client_info": {
+          "package_name": "com.stella.epharmacy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "358241539069-q5v80cg5tl8vqd59oc0mluceo7i9ki9v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8887Ka6MvfvTbBgM4cPnlo5d78TBJV4A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "358241539069-q5v80cg5tl8vqd59oc0mluceo7i9ki9v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
