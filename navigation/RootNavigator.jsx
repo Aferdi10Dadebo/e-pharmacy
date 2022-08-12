@@ -10,10 +10,12 @@ import {
 } from "../redux/slices/NavigationReducer";
 import { AuthenticateMiddleware } from "../redux/middleware/AppAuthenticationMiddleware";
 
-import LoginScreen from "../screens/Auth/LoginScreen";
-import AdminHomeScren from '../screens/Admin/HomeScreen';
-import VendorHomeScreen from '../screens/Vendor/HomeScreen';
-import MainAppScreen from '../screens/MainApp/HomeScreen';
+// navigators
+import AdminStack from "./Admin/AdminStack";
+import VendorStack from "./Vendor/VendorStack";
+import MainAppStack from "./MainApp/MainAppStack";
+import AuthStack from "./Auth/AuthStack";
+
 
 export default function RootNavigator() {
   const theme = useTheme();
@@ -33,15 +35,15 @@ export default function RootNavigator() {
     )
   } else if (navigation.ACTION_TYPE === goToAdmin.toString()) {
     return (
-      <AdminHomeScren />
+      <AdminStack />
     )
   } else if (navigation.ACTION_TYPE === goToVendor.toString()) {
     return (
-      <VendorHomeScreen />
+      <VendorStack />
     )
   } else if (navigation.ACTION_TYPE === goToMainApp.toString()) {
     return (
-      <MainAppScreen />
+      <MainAppStack />
     )
   }
 
@@ -53,7 +55,7 @@ export default function RootNavigator() {
         barStyle="dark-content"
         backgroundColor={theme.colors.amber[100]}
       />
-      <LoginScreen />
+      <AuthStack />
     </View>
   );
 }

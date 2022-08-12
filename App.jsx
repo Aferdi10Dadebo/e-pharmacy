@@ -127,7 +127,6 @@ export default function App() {
       host: "localhost",
       port: 8097,
     });
-    require("react-native-performance-flipper-reporter").setupDefaultFlipperReporter();
   }
 
   if (!appIsReady) {

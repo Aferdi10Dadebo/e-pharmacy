@@ -26,6 +26,9 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const middlewares = getDefaultMiddleware({
   // https://github.com/reduxjs/redux-toolkit/issues/415
   immutableCheck: false,
+  serializableCheck: {
+    ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+  },
 });
 
 if (__DEV__) {
@@ -36,12 +39,7 @@ if (__DEV__) {
 const store = configureStore({
   devTools: true,
   reducer: persistedReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+  middleware: middlewares,
 });
 
 export const persistor = persistStore(store);

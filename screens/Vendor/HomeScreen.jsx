@@ -5,7 +5,7 @@ import  ChangeRoute  from "../../components/ChangeRoute";
 
 export default function HomeScreen(props) {
   return (
-    <Center flex={1} bg={"teal.100"}>
+    <Center flex={1} bg={"blue.300"}>
       <Text>Vendor Home Screen</Text>
 
       <ChangeRoute /> 
