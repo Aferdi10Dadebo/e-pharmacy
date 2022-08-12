@@ -25,7 +25,7 @@ export const RegisterDevice = async (deviceInformation) => {
 
 };
 
-export const TestFirebase = async (data) => {
+export const GetAllDevices = async (data) => {
 
 
   try {
@@ -36,7 +36,7 @@ export const TestFirebase = async (data) => {
         id: doc.id,
       }));
 
-      console.log(attendantsData);
+    //   console.log(attendantsData);
     };
     getAttendants();
   } catch (error) {}

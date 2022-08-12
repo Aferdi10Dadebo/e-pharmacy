@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
-import { NativeBaseProvider, View } from "native-base";
+import { NativeBaseProvider, View, StatusBar } from "native-base";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { LogBox } from "react-native";
 
 // fonts
 import {
@@ -29,9 +31,12 @@ import customTheme from "./customTheme";
 
 // notifications
 import * as Device from "expo-device";
-
 import * as Notifications from "expo-notifications";
 import { registerForPushNotificationsAsync } from "./config/registerForPushNotificationsAsync";
+
+// devtools
+import { connectToDevTools } from "react-devtools-core";
+import RNAsyncStorageFlipper from "rn-async-storage-flipper";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -49,6 +54,11 @@ export default function App() {
   const responseListener = useRef();
 
 
+  LogBox.ignoreLogs([
+    "Warning: Async Storage has been extracted from react-native core...",
+  ]);
+
+  
 
   // register for nofitcations
   useEffect(() => {
@@ -86,6 +96,7 @@ export default function App() {
   React.useEffect(() => {
     async function prepare() {
       try {
+        RNAsyncStorageFlipper(AsyncStorage);
         await SplashScreen.preventAutoHideAsync();
         await Font.loadAsync({
           regular,
@@ -110,6 +121,14 @@ export default function App() {
       await SplashScreen.hideAsync();
     }
   }, [appIsReady]);
+
+  if (__DEV__) {
+    connectToDevTools({
+      host: "localhost",
+      port: 8097,
+    });
+    require("react-native-performance-flipper-reporter").setupDefaultFlipperReporter();
+  }
 
   if (!appIsReady) {
     return null;

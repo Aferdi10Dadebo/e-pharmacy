@@ -2,15 +2,12 @@ import { db } from "../config/firebase-config";
 
 import { doc, updateDoc, setDoc, collection, addDoc } from "firebase/firestore";
 
-export const createFirebaseCollection = async (collectionName, dataObject) => {
-
-    console.log(collectionName, dataObject)
+export const createFirebaseCollection = async (collectionName, data) => {
+  console.log(collectionName, data);
 
   try {
-
-    const collectionRef = collection(db, collectionName)
-
-    await setDoc(doc(db, collectionName, collectionName), dataObject);
+    const collectionRef = collection(db, collectionName);
+    await addDoc(collectionRef, data);
   } catch (error) {
     throw error.message;
   }
@@ -18,21 +15,21 @@ export const createFirebaseCollection = async (collectionName, dataObject) => {
 
 export const createFirebaseCollectionWithId = async (
   collectionName,
-  dataObject,
+  data,
   id
 ) => {
   try {
-    await setDoc(doc(db, collectionName, id), dataObject);
+    await setDoc(doc(db, collectionName, id), data);
   } catch (error) {
     throw error;
   }
 };
 
-export const updateFirebaseCollection = async (collectionName, dataObject) => {
+export const updateFirebaseCollection = async (collectionName, data, id) => {
   try {
-    const docRef = doc(db, collectionName, dataObject);
+    const docRef = doc(db, collectionName, id);
 
-    await updateDoc(docRef, dataObject);
+    await updateDoc(docRef, data);
   } catch (error) {
     throw error;
   }

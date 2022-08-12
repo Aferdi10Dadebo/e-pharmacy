@@ -29,7 +29,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-notifications"],
+    "plugins": ["expo-notifications", "expo-community-flipper"],
     "userInterfaceStyle": "automatic",
     "description": "DFUEL APP DEVELOPED BY DONEWELL LIFE IS&T"
   }

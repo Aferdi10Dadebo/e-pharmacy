@@ -1,30 +1,37 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const INITIAL_STATE = {
-    ACTION_TYPE: "",
+  ACTION_TYPE: "",
 };
 
 export const navigationSlice = createSlice({
-    name: "navigation",
-    initialState: INITIAL_STATE,
-    reducers: {
-        goToLoadingScreen: (state) => {
-            state.ACTION_TYPE = goToLoadingScreen.toString();
-        },
-
-        goToLoginScreen: (state) => {
-            state.ACTION_TYPE = goToLoginScreen.toString();
-        },
-
-
-        goToHomeScreen: (state) => {
-            state.ACTION_TYPE = goToHomeScreen.toString();
-        },
+  name: "navigation",
+  initialState: INITIAL_STATE,
+  reducers: {
+    goToLoading: (state) => {
+      state.ACTION_TYPE = goToLoading.toString();
     },
+
+    goToAuth: (state) => {
+      state.ACTION_TYPE = goToAuth.toString();
+    },
+
+    goToAdmin: (state) => {
+      state.ACTION_TYPE = goToAdmin.toString();
+    },
+
+    goToVendor: (store) => {
+      store.ACTION_TYPE = goToVendor.toString();
+    },
+
+    goToMainApp: (store) => {
+      store.ACTION_TYPE = goToMainApp.toString();
+    },
+  },
 });
 
 // Action creators are generated for each case reducer function
-export const { goToLoadingScreen, goToLoginScreen, goToHomeScreen } =
-    navigationSlice.actions;
+export const { goToLoading, goToAuth, goToAdmin, goToVendor, goToMainApp } =
+  navigationSlice.actions;
 
 export default navigationSlice.reducer;
