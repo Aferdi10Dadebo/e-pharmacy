@@ -8,10 +8,19 @@ import {
 } from "../slices/NavigationReducer";
 
 export const AuthenticateMiddleware = (as) => {
-    return (dispatch) => {
-          dispatch(RouteToAppropraiteStack(as));
-    }
-  
+  return (dispatch) => {
+    dispatch(RouteToAppropraiteStack(as));
+  };
+};
+
+export const LoginMiddleware = () => {
+  return (dispatch) => {};
+};
+
+export const LogoutMiddleware = () => {
+  return (dispatch) => {
+    dispatch(goToAuth());
+  };
 };
 
 export const RouteToAppropraiteStack = (role) => {

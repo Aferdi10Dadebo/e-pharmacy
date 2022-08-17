@@ -7,15 +7,15 @@ const customTheme = extendTheme({
   },
   colors: {
     primary: {
-      100: "#FFE7E7",
-      200: "#FFCDCD",
-      300: "#FF9F9F",
-      400: "#ff5e4e",
-      500: "#eb1c24",
-      600: "#E8060F",
-      700: "#C9060E",
-      800: "#C9060E",
-      900: "#C9060E",
+      100: "#ffb2c8",
+      200: "#ff99b5",
+      300: "#ff6691",
+      400: "#ff326c",
+      500: "#FF0048",
+      600: "#ff326c",
+      700: "#b20032",
+      800: "#99002b",
+      900: "#7f0024",
     },
     secondary: {
       100: "#DDE0E4",
@@ -41,7 +41,7 @@ const customTheme = extendTheme({
     Heading: {
       baseStyle: (props) => {
         return {
-          fontFamily: "semiBold",
+          fontFamily: "semibold",
           color: "#6D6E70",
         };
       },

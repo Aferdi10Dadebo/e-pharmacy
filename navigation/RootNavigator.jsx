@@ -11,7 +11,7 @@ import {
 import { AuthenticateMiddleware } from "../redux/middleware/AppAuthenticationMiddleware";
 
 // navigators
-import AdminStack from "./Admin/AdminStack";
+import AdminNavigator from "./Admin/AdminNavigator";
 import VendorStack from "./Vendor/VendorStack";
 import MainAppStack from "./MainApp/MainAppStack";
 import AuthStack from "./Auth/AuthStack";
@@ -35,7 +35,7 @@ export default function RootNavigator() {
     )
   } else if (navigation.ACTION_TYPE === goToAdmin.toString()) {
     return (
-      <AdminStack />
+      <AdminNavigator />
     )
   } else if (navigation.ACTION_TYPE === goToVendor.toString()) {
     return (
@@ -51,10 +51,7 @@ export default function RootNavigator() {
 
   return (
     <View flex={1} bg={"amber.100"}>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor={theme.colors.amber[100]}
-      />
+      
       <AuthStack />
     </View>
   );

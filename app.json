@@ -1,5 +1,7 @@
 {
   "expo": {
+    "owner":"donewell_life",
+    "jsEngine": "hermes",
     "name": "e-pharmacy",
     "slug": "e-pharmacy",
     "version": "1.0.0",
@@ -31,6 +33,6 @@
     },
     "plugins": ["expo-notifications", "expo-community-flipper"],
     "userInterfaceStyle": "automatic",
-    "description": "DFUEL APP DEVELOPED BY DONEWELL LIFE IS&T"
+    "description": ""
   }
 }

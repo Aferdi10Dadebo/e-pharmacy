@@ -4,6 +4,7 @@ import * as Font from "expo-font";
 import { NativeBaseProvider, View, StatusBar } from "native-base";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LogBox } from "react-native";
+import FlipperAsyncStorage from "rn-flipper-async-storage-advanced";
 
 // fonts
 import {
@@ -53,12 +54,9 @@ export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-
   LogBox.ignoreLogs([
     "Warning: Async Storage has been extracted from react-native core...",
   ]);
-
-  
 
   // register for nofitcations
   useEffect(() => {
@@ -127,6 +125,8 @@ export default function App() {
       host: "localhost",
       port: 8097,
     });
+
+    require("react-native-performance-flipper-reporter").setupDefaultFlipperReporter();
   }
 
   if (!appIsReady) {
@@ -141,6 +141,7 @@ export default function App() {
           colorModeManager={colorModeManager}
         >
           <View onLayout={onLayoutRootView} style={{ flex: 1 }}>
+            <FlipperAsyncStorage />
             <RootNavigator />
           </View>
         </NativeBaseProvider>
