@@ -32,7 +32,7 @@ export default function VendorScreen(props) {
   // filter data and sort by date created
   const filteredData = vendors
     .filter((item) => {
-      return item.name.toLowerCase().includes(filterText.toLowerCase())
+      return item?.name?.toLowerCase().includes(filterText.toLowerCase())
     })
     .sort((a, b) => {
       return new Date(b.created_at) - new Date(a.created_at)
@@ -50,7 +50,7 @@ export default function VendorScreen(props) {
       />
       {/* search part */}
       <Center>
-        {vendors && vendors.length > 0 ? (
+        {vendors && vendors?.length > 0 ? (
           <Center p={5} space="3">
             <Input
               placeholder="Search for a vendor"

@@ -12,7 +12,7 @@ import { AuthenticateMiddleware } from "../redux/middleware/AppAuthenticationMid
 
 // navigators
 import AdminNavigator from "./Admin/AdminNavigator";
-import VendorStack from "./Vendor/VendorStack";
+import VendorNavigator from "./Vendor/VendorNavigator";
 import MainAppStack from "./MainApp/MainAppStack";
 import AuthStack from "./Auth/AuthStack";
 
@@ -22,9 +22,6 @@ export default function RootNavigator() {
   const dispatch = useDispatch();
   const navigation = useSelector((state) => state.navigation);
 
-  React.useEffect(() => {
-    // dispatch(AuthenticateMiddleware("vendor"));
-  }, [navigation.ACTION_TYPE]);
 
 
   if (navigation.ACTION_TYPE === goToLoading.toString()) {
@@ -39,7 +36,7 @@ export default function RootNavigator() {
     )
   } else if (navigation.ACTION_TYPE === goToVendor.toString()) {
     return (
-      <VendorStack />
+      <VendorNavigator />
     )
   } else if (navigation.ACTION_TYPE === goToMainApp.toString()) {
     return (

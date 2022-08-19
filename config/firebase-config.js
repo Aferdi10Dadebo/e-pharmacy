@@ -29,19 +29,12 @@ const storage = getStorage(app);
 
 // collections 
 const DEVICES = "devices";
-const VENDORS = 'vendors';
+const USERS = 'users';
 
 
 // collection references
 const devicesRef = collection(db, DEVICES);
-const vendorsRef = collection(db, VENDORS);
+const usersRef = collection(db, USERS);
 
 
-export {
-  storage,
-  db,
-  DEVICES,
-  devicesRef,
-  VENDORS,
-  vendorsRef,
-}
+export { storage, db, auth, DEVICES, devicesRef, USERS, usersRef };

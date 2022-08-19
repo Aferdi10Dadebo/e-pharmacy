@@ -9,6 +9,7 @@ import {
   Button,
   ScrollView,
   HStack,
+  Box,
 } from "native-base";
 import { FlashList } from "@shopify/flash-list";
 import { Linking } from "react-native";
@@ -16,6 +17,7 @@ import { Feather, FontAwesome } from "@expo/vector-icons";
 // import Logo from "../assets/Logo-White.svg";
 import DrawerItem from "../DrawerItem";
 import logo from "../../../assets/icon.png";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 import { useDispatch, useSelector } from "react-redux";
 import { LogoutMiddleware } from "../../../redux/middleware/AppAuthenticationMiddleware";
@@ -29,23 +31,37 @@ const menuData = [
   },
   {
     icon: "user",
-    name: "Vendors",
-    screen: "VendorStack",
+    name: "Account Details",
+    screen: "AccountDetailsScreen",
     key: "2",
   },
 
   {
-    icon: "smartphone",
-    name: "Devices",
-    screen: "DevicesScreen",
-    key: "5",
+    icon: "briefcase",
+    name: "Products",
+    screen: "ProductStack",
+    key: "3",
   },
 
   {
     icon: "trending-up",
-    name: "Promotions",
-    screen: "PromotionsScreen",
+    name: "Promotion Request",
+    screen: "PromotionStack",
+    key: "5",
+  },
+
+  {
+    icon: "shopping-cart",
+    name: "My Orders",
+    screen: "OrderStack",
     key: "6",
+  },
+
+  {
+    icon: "mail",
+    name: "Messages",
+    screen: "MessageStack",
+    key: "7",
   },
 ];
 
@@ -54,44 +70,24 @@ export default function DrawerComponent(props) {
   // redux
   const dispatch = useDispatch();
   const authState = useSelector((state) => state.auth);
+  const { user } = authState;
 
   return (
     <View flex={1}>
       {/* Drawer Header */}
-      <VStack
-        bg="primary.500"
-        safeAreaTop
-        h={"20%"}
-        px={5}
-        py={2}
-        alignItems="center"
-        justifyContent="space-between"
-      >
-        <HStack w="100%" alignItems="center" justifyContent="space-between">
-          <Image
-            source={logo}
-            alt="logo"
-            height="45"
-            width="45"
-            bg="primary.300"
-            rounded={"50"}
-          />
+      <Center bg="primary.500" safeAreaTop h={hp(20)} px={5} py={2} >
+        <Image
+          source={{ uri: user?.image }}
+          alt="logo"
+          height={hp(8)}
+          width={hp(8)}
+          bg="primary.300"
+          rounded={"sm"}
+          mb={2}
+        />
 
-          <Button
-            isLoading={authState.isLogoutLoading}
-            isLoadingText="Logging out..."
-            onPress={() => {
-              dispatch(LogoutMiddleware());
-            }}
-          >
-            Logout
-          </Button>
-        </HStack>
-
-        <Text color="text.100" fontSize={"lg"} pb={2}>
-          Admin
-        </Text>
-      </VStack>
+        <Text color="white" fontSize={'lg'}>{user?.name}</Text>
+      </Center>
 
       {/* Menu Items */}
       <FlashList
@@ -110,6 +106,20 @@ export default function DrawerComponent(props) {
           />
         )}
       />
+
+      {/* Footer */}
+      <HStack safeArea p={5}>
+        <Button
+          isLoading={authState.isLogoutLoading}
+          isLoadingText="Logging out..."
+          onPress={() => {
+            dispatch(LogoutMiddleware());
+          }}
+          w="90%"
+        >
+          Logout
+        </Button>
+      </HStack>
     </View>
   );
 }

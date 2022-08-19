@@ -43,35 +43,35 @@ export default function VendorScreen(props) {
                     <Stack space={5} mx={3}>
                         <ListItems
                             icon='user'
-                            value={routedData.name}
+                            value={routedData?.name}
                         />
 
                         <ListItems
                             icon='phone'
-                            value={routedData.phone}
+                            value={routedData?.phone}
                             // press with linking
                             onPress={() => {
-                                Linking.openURL(`tel:${routedData.phone}`)
+                                Linking.openURL(`tel:${routedData?.phone}`)
                             }}
                         />
 
                         <ListItems
                             icon='mail'
-                            value={routedData.email}
+                            value={routedData?.email}
                         />
 
                         <ListItems
                             icon='flag'
-                            value={routedData.address}
+                            value={routedData?.address}
                         />
 
 
                         <ListItems
                             icon='globe'
-                            value={routedData.website}
+                            value={routedData?.website}
                             // press with linking
                             onPress={() => {
-                                Linking.openURL(routedData.website)
+                                Linking.openURL(routedData?.website)
                             }}
                         />
 

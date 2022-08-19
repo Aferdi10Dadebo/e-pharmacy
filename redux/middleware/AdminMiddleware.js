@@ -8,8 +8,8 @@ import {
   DEVICES,
   db,
   devicesRef,
-  VENDORS,
-  vendorsRef,
+  USERS,
+  usersRef,
 } from "../../config/firebase-config";
 
 import {
@@ -21,8 +21,10 @@ import {
   addDoc,
   getDocs,
   onSnapshot,
+  query,
+  where
 } from "firebase/firestore";
-import { async } from "@firebase/util";
+
 
 export const GetAllDevices = () => {
   return async (dispatch) => {
@@ -44,7 +46,8 @@ export const GetAllVendors = (data) => {
   return async (dispatch) => {
     try {
       const getVendors = async () => {
-        const data = getDocs(vendorsRef);
+        const q = query(usersRef, where("role", "==", "vendor"));
+        const data = getDocs(q);
         const vendorsData = (await data).docs.map((doc) => ({
           ...doc.data(),
           id: doc.id,
@@ -52,6 +55,8 @@ export const GetAllVendors = (data) => {
         dispatch(getAllVendors(vendorsData));
       };
       getVendors();
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
