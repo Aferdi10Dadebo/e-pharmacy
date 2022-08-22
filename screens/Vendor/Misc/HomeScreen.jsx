@@ -12,27 +12,38 @@ import { RefreshControl } from "react-native";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import {
-  GetAllDevices,
-  GetAllVendors,
-} from "../../../redux/middleware/AdminMiddleware";
 
 // custom components
 import { AppHeader } from "../../../components/AppHeader";
 import { Card } from "../../../components/Admin/Cards";
 import { ScrollView } from "react-native";
+import {
+  GetVendorProducts,
+  GetVendorOrders,
+  GetVendorMessages,
+  GetVendorPromotions,
+} from "../../../redux/middleware/VendorMiddleware";
 
 export default function HomeScreen(props) {
   const dispatch = useDispatch();
-  const {user} = useSelector((state) => state.auth);
-  const { devices, deviceCount, vendors, vendorCount } = useSelector(
-    (state) => state.admin
-  );
+  const { user } = useSelector((state) => state.auth);
+  const {
+    vendorProducts,
+    vendorOrders,
+    vendorMessages,
+    vendorPromotions,
+    vendorProductCount,
+    vendorOrderCount,
+    vendorMessageCount,
+    vendorPromotionCount,
+  } = useSelector((state) => state.vendor);
 
   const GetPageData = React.useCallback(() => {
-    dispatch(GetAllDevices());
-    dispatch(GetAllVendors());
-  }, [devices, vendors]);
+    dispatch(GetVendorProducts(user.email));
+    dispatch(GetVendorOrders(user.email));
+    dispatch(GetVendorMessages(user.email));
+    dispatch(GetVendorPromotions(user.email));
+  }, []);
 
   React.useEffect(() => {
     GetPageData();
@@ -55,7 +66,7 @@ export default function HomeScreen(props) {
           <Box mt={5} />
 
           <Card
-            value={vendorCount}
+            value={vendorProductCount}
             title={"My Products"}
             onPress={() => {
               props.navigation.navigate("ProductStack");
@@ -64,7 +75,7 @@ export default function HomeScreen(props) {
           />
 
           <Card
-            value={deviceCount}
+            value={vendorOrderCount}
             title={"My Orders"}
             onPress={() => {
               props.navigation.navigate("OrderStack");
@@ -73,7 +84,7 @@ export default function HomeScreen(props) {
           />
 
           <Card
-            value={"0"}
+            value={vendorMessageCount}
             title={"My Messages"}
             onPress={() => {
               props.navigation.navigate("MessageStack");
@@ -82,7 +93,7 @@ export default function HomeScreen(props) {
           />
 
           <Card
-            value={"0"}
+            value={vendorPromotionCount}
             title={"Promotions Requests"}
             onPress={() => {
               props.navigation.navigate("PromotionStack");

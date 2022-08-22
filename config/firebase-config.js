@@ -2,8 +2,7 @@ import { initializeApp } from "firebase/app";
 import { collection } from "@firebase/firestore";
 import { getAuth } from "@firebase/auth";
 import { getStorage } from "@firebase/storage";
-import { initializeFirestore } from 'firebase/firestore';
-
+import { initializeFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA7lOr0w8xoCNfn2WXBlsh4v2UO3OmeERg",
@@ -15,7 +14,6 @@ const firebaseConfig = {
   measurementId: "G-4HGPZD0VSK",
 };
 
-
 const app = initializeApp(firebaseConfig);
 
 // firebase services
@@ -25,16 +23,36 @@ const db = initializeFirestore(app, {
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-
-
-// collections 
+// collections
 const DEVICES = "devices";
-const USERS = 'users';
-
+const USERS = "users";
+const VENDOR_ORDERS = "vendorOrders";
+const VENDOR_PRODUCTS = "vendorProduct";
+const VENDOR_MESSAGES = "vendorMessages";
+const VENDOR_PROMOTIONS = "vendorPromotions";
 
 // collection references
 const devicesRef = collection(db, DEVICES);
 const usersRef = collection(db, USERS);
+const vendorOrdersRef = collection(db, VENDOR_ORDERS);
+const vendorProductsRef = collection(db, VENDOR_PRODUCTS);
+const vendorMessagesRef = collection(db, VENDOR_MESSAGES);
+const vendorPromotionsRef = collection(db, VENDOR_PROMOTIONS);
 
-
-export { storage, db, auth, DEVICES, devicesRef, USERS, usersRef };
+export {
+  storage,
+  db,
+  auth,
+  DEVICES,
+  devicesRef,
+  USERS,
+  usersRef,
+  VENDOR_ORDERS,
+  vendorOrdersRef,
+  VENDOR_PRODUCTS,
+  vendorProductsRef,
+  VENDOR_MESSAGES,
+  vendorMessagesRef,
+  VENDOR_PROMOTIONS,
+  vendorPromotionsRef,
+};

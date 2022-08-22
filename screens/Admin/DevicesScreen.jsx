@@ -9,14 +9,9 @@ import {
   TextArea,
   HStack,
   IconButton,
-  Image,
-  Badge,
-  Pressable,
-  Stack,
   Fab,
   useDisclose,
   Actionsheet,
-  Tag,
   useToast,
 } from "native-base";
 import { FlashList } from "@shopify/flash-list";
@@ -28,7 +23,7 @@ import axios from "axios";
 import { AppHeader } from "../../components/AppHeader";
 
 // redux
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 export default function DevicesScreen(props) {
   const toast = useToast();
@@ -169,8 +164,8 @@ export default function DevicesScreen(props) {
             >
               <Icon as={Feather} name="smartphone" size="3xl" />
               <Text my={2}>{item.deviceName}</Text>
-              <Text mb={2}>{item?.role ?? "no role assigned"}</Text>
-              <Text color="text.400">{item?.deviceExpoPushToken}</Text>
+              <Text >{item?.role ?? "no role assigned"}</Text>
+           
             </Center>
           )}
         />
