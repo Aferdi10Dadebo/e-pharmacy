@@ -29,7 +29,7 @@ import { GetVendorProducts } from "../../../redux/middleware/VendorMiddleware";
 export default function ProductsScreen(props) {
   const dispatch = useDispatch();
   const { vendorProducts } = useSelector((state) => state.vendor);
-  const {user} = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
   const [filterText, setFilterText] = React.useState("");
 
@@ -129,7 +129,8 @@ export default function ProductsScreen(props) {
                     style={{
                       width: hp(10),
                       height: hp(10),
-                      resizeMode: "cover",
+                      bg: "white",
+                      resizeMode: "contain",
                     }}
                   />
                   <HStack flex={7} justifyContent="space-between" px={3}>
@@ -137,17 +138,30 @@ export default function ProductsScreen(props) {
                       <Text fontSize="lg" fontFamily="regular">
                         {item?.name}
                       </Text>
-                      <Text fontSize='sm' fontFamily={'light'}>
-                          Qty: {item.qty}
+                      <Text fontSize="xs" fontFamily={"light"} color="text.500">
+                        {item.qty} Remaining
                       </Text>
                     </Box>
 
                     <Box>
-                      <Text fontSize="lg" fontFamily="regular">
+                      <Text fontSize="lg" fontFamily="regular" color="text.500">
                         {item?.price} GHS
+                      </Text>
+                      <Text fontSize="xs" fontFamily="regular" color="text.500">
+                        {item?.salePrice} GHS (SP)
                       </Text>
                     </Box>
                   </HStack>
+
+                  <Badge
+                    mr={2}
+                    bg="green.500"
+                    _text={{
+                      color: "white",
+                    }}
+                  >
+                    {item?.productOrderCount ?? 0} 
+                  </Badge>
                 </HStack>
               </Pressable>
             );

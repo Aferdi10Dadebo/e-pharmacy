@@ -29,9 +29,7 @@ export const CustomTextArea = (props) => {
       {...props}
       variant="filled"
       bg="white"
-      size="lg"
-      fontFamily={"regular"}
-      placeholderTextColor={"#000"}
+      fontFamily={"light"}
     />
   </FormControl>;
 };

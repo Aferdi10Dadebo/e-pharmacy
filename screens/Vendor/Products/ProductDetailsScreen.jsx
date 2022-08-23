@@ -59,6 +59,8 @@ export default function ProductDetailsScreen(props) {
             source={{ uri: product?.image }}
             height={hp(30)}
             alt={product?.name}
+            bg='white'
+            resizeMode='contain'
           />
 
           <Stack p={5} space={5}>
