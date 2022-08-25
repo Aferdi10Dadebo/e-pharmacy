@@ -11,12 +11,11 @@ import {
   VENDOR_ORDERS,
   VENDOR_MESSAGES,
   VENDOR_PROMOTIONS,
+  USER_MESSAGES,
 } from "../../config/firebase-config";
 
-import {
-  doc,
-  getDoc,
-} from "firebase/firestore";
+import { doc, getDoc, arrayUnion, writeBatch } from "firebase/firestore";
+import { async } from "@firebase/util";
 
 export const GetVendorProducts = (id) => {
   return async (dispatch) => {
@@ -59,7 +58,7 @@ export const GetVendorMessages = (id) => {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const vendorMessages = docSnap.data();
-        dispatch(getAllVendorMessages(vendorMessages.messages));
+        dispatch(getAllVendorMessages(vendorMessages));
       } else {
         console.log("No such document!");
       }
@@ -82,6 +81,51 @@ export const GetVendorPromotions = (id) => {
       }
     } catch (error) {
       throw error;
+    }
+  };
+};
+
+// UpdateIsRead -> sets chat isRead for each chat object to true
+
+export const SendMessage = (
+  v_id,
+  c_id,
+  vendor_key,
+  user_key,
+  vendor_name,
+  vendor_image,
+  chat
+) => {
+  return async (dispatch) => {
+    // console.log(
+    //   v_id,
+    //   c_id,
+    //   vendor_key,
+    //   user_key,
+    //   vendor_name,
+    //   vendor_image,
+    //   chat
+    // );
+    try {
+      // Get a new write batch
+      const batch = writeBatch(db);
+      // update vendor messages
+      const vendorRef = doc(db, VENDOR_MESSAGES, v_id);
+      batch.update(vendorRef, {
+        [`${user_key}.chat`]: arrayUnion(chat),
+      });
+      // update user messages
+      const userRef = doc(db, USER_MESSAGES, c_id);
+      batch.update(userRef, {
+        [`${vendor_key}.chat`]: arrayUnion(chat),
+        [`${vendor_key}.unread`]: 2,
+        [`${vendor_key}.name`]: vendor_name,
+        [`${vendor_key}.image`]: vendor_image,
+      });
+      // Commit the batch
+      await batch.commit();
+    } catch (error) {
+      console.log(error.message);
     }
   };
 };

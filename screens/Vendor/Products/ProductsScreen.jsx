@@ -160,7 +160,7 @@ export default function ProductsScreen(props) {
                       color: "white",
                     }}
                   >
-                    {item?.productOrderCount ?? 0} 
+                    {item?.productOrderCount ?? 0}
                   </Badge>
                 </HStack>
               </Pressable>

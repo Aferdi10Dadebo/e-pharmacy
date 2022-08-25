@@ -33,7 +33,7 @@ export const VendorReducer = createSlice({
     getAllVendorMessages: (state, action) => {
       state.ACTION_TYPE = getAllVendorMessages.toString();
       state.vendorMessages = action.payload;
-      state.vendorMessageCount = action.payload.length;
+      state.vendorMessageCount = Object.keys(action.payload).length;
     },
 
     getAllVendorPromotions: (state, action) => {
