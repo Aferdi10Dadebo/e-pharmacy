@@ -58,23 +58,32 @@ export default function AddProductScreen(props) {
     }
 
     dispatch(
-      CreateProduct(user.email, {
-        image: image,
-        name: name,
-        id:
-          name.toLowerCase().replace(/\s/g, "") +
-          (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000),
-        description: description,
-        dosage: dosage,
-        price: price,
-        isOnSale: isOnSale,
-        isInStock: isInStock,
-        qty: qty,
-        qtyUnit: qtyUnit,
-        salePrice: salePrice,
-        productOrderCount: 0,
-        updatedAt: new Date(),
-      })
+      CreateProduct(
+        user.email,
+        {
+          image: image,
+          name: name,
+          id:
+            name.toLowerCase().replace(/\s/g, "") +
+            (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000),
+          description: description,
+          dosage: dosage,
+          price: price,
+          isOnSale: isOnSale,
+          isInStock: isInStock,
+          qty: qty,
+          qtyUnit: qtyUnit,
+          salePrice: salePrice,
+          productOrderCount: 0,
+          updatedAt: new Date(),
+        },
+        {
+          vendor_name: user.name,
+          vendor_id: user.id,
+          vendor_phone: user.phone,
+          vendor_address: user.address,
+        }
+      )
     );
   };
 

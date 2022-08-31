@@ -67,19 +67,28 @@ export default function ProductDetailsScreen(props) {
   // edit product handler
   const onEditProduct = () => {
     dispatch(
-      CreateProduct(user.email, {
-        image: image,
-        name: name,
-        id: product.id,
-        price: price,
-        isOnSale: isOnSale,
-        isInStock: isInStock,
-        qty: qty,
-        qtyUnit: qtyUnit,
-        salePrice: salePrice,
-        productOrderCount: 0,
-        updatedAt: new Date(),
-      })
+      CreateProduct(
+        user.email,
+        {
+          image: image,
+          name: name,
+          id: product.id,
+          price: price,
+          isOnSale: isOnSale,
+          isInStock: isInStock,
+          qty: qty,
+          qtyUnit: qtyUnit,
+          salePrice: salePrice,
+          productOrderCount: 0,
+          updatedAt: new Date(),
+        },
+        {
+          vendor_name: user.name,
+          vendor_id: user.email,
+          vendor_phone: user.phone,
+          vendor_address: user.address,
+        }
+      )
     );
   };
 

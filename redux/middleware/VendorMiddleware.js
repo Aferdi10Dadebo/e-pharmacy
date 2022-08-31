@@ -15,6 +15,7 @@ import {
   VENDOR_MESSAGES,
   VENDOR_PROMOTIONS,
   USER_MESSAGES,
+  PRODUCTS,
 } from "../../config/firebase-config";
 
 import { doc, getDoc, arrayUnion, writeBatch } from "firebase/firestore";
@@ -140,7 +141,7 @@ export const SendMessage = (
 };
 
 // CreateVendorProduct -> using merge on setDoc works as a create and update if the document already exist
-export const CreateProduct = (id, product) => {
+export const CreateProduct = (id, product, productStore) => {
   return async (dispatch) => {
     dispatch(createProductStart());
 
@@ -148,11 +149,25 @@ export const CreateProduct = (id, product) => {
       // Get a new write batch
       const batch = writeBatch(db);
 
+      // store to vendorProducts
       const productsRef = doc(db, VENDOR_PRODUCTS, id);
       batch.set(
         productsRef,
         {
           [`${product.id}`]: product,
+        },
+        {
+          merge: true,
+        }
+      );
+
+      // store to all products for user to be able to get the various products
+      const productStoreRef = doc(db, PRODUCTS, product.id);
+      batch.set(
+        productStoreRef,
+        {
+          ...product,
+          ...productStore,
         },
         {
           merge: true,
@@ -171,4 +186,3 @@ export const CreateProduct = (id, product) => {
     }
   };
 };
-

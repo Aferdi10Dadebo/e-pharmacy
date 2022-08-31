@@ -30,7 +30,8 @@ const VENDOR_ORDERS = "vendorOrders";
 const VENDOR_PRODUCTS = "vendorProduct";
 const VENDOR_MESSAGES = "vendorMessages";
 const VENDOR_PROMOTIONS = "vendorPromotions";
-const USER_MESSAGES = 'userMessages';
+const USER_MESSAGES = "userMessages";
+const PRODUCTS = "products";
 
 // collection references
 const devicesRef = collection(db, DEVICES);
@@ -40,6 +41,7 @@ const vendorProductsRef = collection(db, VENDOR_PRODUCTS);
 const vendorMessagesRef = collection(db, VENDOR_MESSAGES);
 const vendorPromotionsRef = collection(db, VENDOR_PROMOTIONS);
 const userMessagesRef = collection(db, USER_MESSAGES);
+const productsRef = collection(db, PRODUCTS);
 
 export {
   storage,
@@ -58,5 +60,7 @@ export {
   VENDOR_PROMOTIONS,
   vendorPromotionsRef,
   USER_MESSAGES,
-  userMessagesRef
+  userMessagesRef,
+  PRODUCTS,
+  productsRef,
 };
