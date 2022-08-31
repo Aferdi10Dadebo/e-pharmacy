@@ -34,19 +34,19 @@ export default function ProductsScreen(props) {
   const [filterText, setFilterText] = React.useState("");
 
   // filter data and sort by date created
-  const filteredData = vendorProducts
+  const filteredData = [...Object.values(vendorProducts)]
     .filter((item) => {
-      return item?.name?.toLowerCase().includes(filterText.toLowerCase());
+      return item?.name?.includes(filterText);
     })
     .sort((a, b) => {
-      return new Date(b.created_at) - new Date(a.created_at);
+      return (
+        new Date(b.updatedAt.seconds * 1000) -
+        new Date(a.updatedAt.seconds * 1000)
+      );
     });
-
   const GetPageData = React.useCallback(() => {
     dispatch(GetVendorProducts(user.email));
   }, []);
-
-  console.log(filteredData);
 
   return (
     <Box flex={1}>
@@ -61,7 +61,8 @@ export default function ProductsScreen(props) {
 
       {/* search part */}
       <Center>
-        {vendorProducts && vendorProducts?.length > 0 ? (
+        {Object.keys(vendorProducts) &&
+        Object.keys(vendorProducts)?.length > 0 ? (
           <Center p={5} space="3">
             <Input
               placeholder="Search for a product"
@@ -82,6 +83,10 @@ export default function ProductsScreen(props) {
         <FlashList
           data={filteredData}
           estimatedItemSize={100}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 50,
+          }}
           refreshControl={
             <RefreshControl refreshing={false} onRefresh={GetPageData} />
           }
@@ -152,16 +157,18 @@ export default function ProductsScreen(props) {
                       </Text>
                     </Box>
                   </HStack>
-
-                  <Badge
-                    mr={2}
-                    bg="green.500"
-                    _text={{
-                      color: "white",
-                    }}
-                  >
-                    {item?.productOrderCount ?? 0}
-                  </Badge>
+                  {item?.productOrderCount > 0 && (
+                    <Badge
+                      mr={2}
+                      rounded="md"
+                      bg="green.500"
+                      _text={{
+                        color: "white",
+                      }}
+                    >
+                      {item?.productOrderCount ?? 0}
+                    </Badge>
+                  )}
                 </HStack>
               </Pressable>
             );

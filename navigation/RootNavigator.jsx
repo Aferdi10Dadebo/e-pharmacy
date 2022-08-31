@@ -13,7 +13,7 @@ import { AuthenticateMiddleware } from "../redux/middleware/AppAuthenticationMid
 // navigators
 import AdminNavigator from "./Admin/AdminNavigator";
 import VendorNavigator from "./Vendor/VendorNavigator";
-import MainAppStack from "./MainApp/MainAppStack";
+import MainAppNavigator from "./MainApp/MainAppNavigator";
 import AuthStack from "./Auth/AuthStack";
 
 
@@ -40,7 +40,7 @@ export default function RootNavigator() {
     )
   } else if (navigation.ACTION_TYPE === goToMainApp.toString()) {
     return (
-      <MainAppStack />
+      <MainAppNavigator />
     )
   }
 

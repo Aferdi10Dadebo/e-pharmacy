@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import {
   Box,
   Text,
@@ -13,39 +13,49 @@ import {
   Pressable,
   Stack,
   Fab,
-} from 'native-base'
-import { FlashList } from '@shopify/flash-list'
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen'
-import { Feather } from '@expo/vector-icons'
+} from "native-base";
+import { FlashList } from "@shopify/flash-list";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import { Feather } from "@expo/vector-icons";
+import { RefreshControl } from "react-native";
 
 //  custom components
-import { AppHeader } from '../../components/AppHeader'
+import { AppHeader } from "../../components/AppHeader";
 
 // redux
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from "react-redux";
+import {GetAllVendors} from '../../redux/middleware/AdminMiddleware'
 
 export default function VendorScreen(props) {
-  const { vendors } = useSelector((state) => state.admin)
+  const { vendors } = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
 
-  const [filterText, setFilterText] = React.useState('')
+  const [filterText, setFilterText] = React.useState("");
 
   // filter data and sort by date created
   const filteredData = vendors
     .filter((item) => {
-      return item?.name?.toLowerCase().includes(filterText.toLowerCase())
+      return item?.name?.toLowerCase().includes(filterText.toLowerCase());
     })
     .sort((a, b) => {
-      return new Date(b.created_at) - new Date(a.created_at)
-    })
+      return (
+        new Date(b?.created_at?.seconds * 1000) -
+        new Date(a?.created_at?.seconds * 1000)
+      );
+    });
+
+   const GetPageData = React.useCallback(() => {
+     dispatch(GetAllVendors());
+   }, [vendors]);
 
   return (
     <Box flex={1}>
       <AppHeader
-        title={'Vendors'}
+        title={"Vendors"}
         toggleDrawer={() => props.navigation.openDrawer()}
         hasBackButton
         onBackPress={() => {
-          props.navigation.goBack()
+          props.navigation.goBack();
         }}
       />
       {/* search part */}
@@ -55,9 +65,9 @@ export default function VendorScreen(props) {
             <Input
               placeholder="Search for a vendor"
               width="80%"
-              variant={'rounded'}
+              variant={"rounded"}
               borderColor="primary.400"
-              fontFamily={'regular'}
+              fontFamily={"regular"}
               InputRightElement={<Icon as={Feather} name="search" mr="5" />}
               onChangeText={(text) => setFilterText(text)}
             />
@@ -70,6 +80,9 @@ export default function VendorScreen(props) {
         <FlashList
           data={filteredData}
           estimatedItemSize={100}
+          refreshControl={
+            <RefreshControl refreshing={false} onRefresh={GetPageData} />
+          }
           ListEmptyComponent={() => {
             return (
               <Center h={hp(70)}>
@@ -79,24 +92,24 @@ export default function VendorScreen(props) {
                 <Button
                   leftIcon={<Icon as={Feather} name="plus" />}
                   onPress={() => {
-                    props.navigation.navigate('AddVendorScreen')
+                    props.navigation.navigate("AddVendorScreen");
                   }}
                 >
                   ADD NEW VENDOR
                 </Button>
               </Center>
-            )
+            );
           }}
           renderItem={({ item, index }) => {
             return (
               <Pressable
                 onPress={() => {
                   props.navigation.navigate({
-                    name: 'VendorScreen',
+                    name: "VendorScreen",
                     params: {
                       ...item,
                     },
-                  })
+                  });
                 }}
               >
                 <HStack
@@ -118,32 +131,35 @@ export default function VendorScreen(props) {
 
                   <Stack flex={7} space={2}>
                     <Text fontSize="xs" color="text.400">
-                      {item?.created_at.toDate().toLocaleString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        second: 'numeric',
-                      })}
+                      {new Date(item.updated_at.seconds * 1000).toLocaleString(
+                        "en-US",
+                        {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "numeric",
+                          minute: "numeric",
+                          second: "numeric",
+                        }
+                      )}
                     </Text>
 
                     <Text>{item.name}</Text>
                     <Text>{item.phone}</Text>
                   </Stack>
                   <Badge
-                    bg="success.500"
+                    bg={item.status === "active" ? "success.500" : "danger.500"}
                     variant="subtle"
                     _text={{
-                      color: 'white',
-                      fontSize: 'xs',
+                      color: "white",
+                      fontSize: "xs",
                     }}
                   >
                     {item.status}
                   </Badge>
                 </HStack>
               </Pressable>
-            )
+            );
           }}
         />
 
@@ -154,10 +170,10 @@ export default function VendorScreen(props) {
           mr={3}
           placement="bottom-right"
           onPress={() => {
-            props.navigation.navigate('AddVendorScreen')
+            props.navigation.navigate("AddVendorScreen");
           }}
         />
       </Box>
     </Box>
-  )
+  );
 }

@@ -3,6 +3,9 @@ import {
   getAllVendorOrders,
   getAllVendorMessages,
   getAllVendorPromotions,
+  createProductStart,
+  createProductSuccess,
+  createProductError,
 } from "../slices/VendorReducer";
 
 import {
@@ -24,7 +27,7 @@ export const GetVendorProducts = (id) => {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const vendorProducts = docSnap.data();
-        dispatch(getAllVendorProducts(vendorProducts.products));
+        dispatch(getAllVendorProducts(vendorProducts));
       } else {
         console.log("No such document!");
       }
@@ -41,7 +44,7 @@ export const GetVendorOrders = (id) => {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const vendorOrders = docSnap.data();
-        dispatch(getAllVendorOrders(vendorOrders.orders));
+        dispatch(getAllVendorOrders(vendorOrders));
       } else {
         console.log("No such document!");
       }
@@ -86,7 +89,6 @@ export const GetVendorPromotions = (id) => {
 };
 
 // UpdateIsRead -> sets chat isRead for each chat object to true
-
 export const SendMessage = (
   v_id,
   c_id,
@@ -116,12 +118,19 @@ export const SendMessage = (
       });
       // update user messages
       const userRef = doc(db, USER_MESSAGES, c_id);
-      batch.update(userRef, {
-        [`${vendor_key}.chat`]: arrayUnion(chat),
-        [`${vendor_key}.unread`]: 2,
-        [`${vendor_key}.name`]: vendor_name,
-        [`${vendor_key}.image`]: vendor_image,
-      });
+      batch.set(
+        userRef,
+        {
+          [`${vendor_key}`]: {
+            chat: arrayUnion(chat),
+            name: vendor_name,
+            image: vendor_image,
+          },
+        },
+        {
+          merge: true,
+        }
+      );
       // Commit the batch
       await batch.commit();
     } catch (error) {
@@ -129,3 +138,37 @@ export const SendMessage = (
     }
   };
 };
+
+// CreateVendorProduct -> using merge on setDoc works as a create and update if the document already exist
+export const CreateProduct = (id, product) => {
+  return async (dispatch) => {
+    dispatch(createProductStart());
+
+    try {
+      // Get a new write batch
+      const batch = writeBatch(db);
+
+      const productsRef = doc(db, VENDOR_PRODUCTS, id);
+      batch.set(
+        productsRef,
+        {
+          [`${product.id}`]: product,
+        },
+        {
+          merge: true,
+        }
+      );
+
+      batch
+        .commit()
+        .then(() => dispatch(createProductSuccess({ message: "Success" })))
+        .catch((error) =>
+          dispatch(createProductError({ message: error.code }))
+        );
+    } catch (error) {
+      console.log(error.message);
+      dispatch(createProductError({ message: error.message }));
+    }
+  };
+};
+

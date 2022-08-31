@@ -48,6 +48,7 @@ export default function DevicesScreen(props) {
       toast.show({
         description: "Please fill all fields",
         placement: "top",
+        duration: 1000,
       });
       return;
     }
@@ -77,6 +78,7 @@ export default function DevicesScreen(props) {
               title: "Error sending notification",
               description: res.data.data.message,
               placement: "top",
+              duration: 1000,
             });
             setLoading(false);
             setOpen(false);
@@ -87,6 +89,7 @@ export default function DevicesScreen(props) {
               title: "Notification sent",
               description: "",
               placement: "top",
+              duration: 1000,
             });
             setLoading(false);
             setOpen(false);
@@ -100,6 +103,7 @@ export default function DevicesScreen(props) {
           toast.show({
             description: err.message,
             placement: "top",
+            duration: 1000,
           });
           setLoading(false);
         });

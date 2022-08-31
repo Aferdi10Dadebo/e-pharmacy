@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LogBox } from "react-native";
 import FlipperAsyncStorage from "rn-flipper-async-storage-advanced";
 
+
 // fonts
 import {
   Poppins_300Light as light,
@@ -54,9 +55,11 @@ export default function App() {
   const notificationListener = useRef();
   const responseListener = useRef();
 
-  LogBox.ignoreLogs([
-    "Warning: Async Storage has been extracted from react-native core...",
-  ]);
+  // Ignore log notification by message:
+  // LogBox.ignoreLogs(["Warning: ..."]);
+
+  // Ignore all log notifications:
+  LogBox.ignoreAllLogs();
 
   // register for nofitcations
   useEffect(() => {

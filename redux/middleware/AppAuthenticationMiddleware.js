@@ -7,6 +7,8 @@ import {
   goToVendor,
 } from "../slices/NavigationReducer";
 
+import { clearVendor } from "../slices/VendorReducer";
+
 import {
   loginStart,
   loginSuccess,
@@ -23,7 +25,10 @@ import {
   getUserDetailsStart,
   getUserDetailsSuccess,
   getUserDetailsError,
-  resetActionType,
+  updateUserStart,
+  updateUserSuccess,
+  updatePasswordSuccess,
+  updateUserError,
 } from "../slices/AuthenticationReducer";
 
 import {
@@ -55,6 +60,7 @@ import {
   updatePassword,
   getAuth,
   signOut,
+  createUserWithEmailAndPassword,
 } from "@firebase/auth";
 
 import { async } from "@firebase/util";
@@ -104,6 +110,7 @@ export const LogoutMiddleware = () => {
     signOut(auth)
       .then(() => {
         dispatch(logoutSuccess());
+        dispatch(clearVendor());
         dispatch(goToAuth());
       })
       .catch((error) => {
@@ -137,3 +144,105 @@ export const RouteToAppropraiteStack = (role) => {
     }
   };
 };
+
+// update user profile
+export const UpdateUser = (data) => {
+  return async (dispatch) => {
+    dispatch(updateUserStart());
+
+    try {
+      const ref = doc(db, USERS, data.email);
+      await updateDoc(ref, { ...data, update_at: new Date() }).then(() => {
+        checkUser(data.email).then((userData) => {
+          dispatch(
+            updateUserSuccess({
+              message: "Updated Profile Successfully",
+              user: userData,
+            })
+          );
+        });
+      });
+    } catch (error) {
+      /* Dispatching an action to the reducer. */
+      dispatch(updateUserError({ message: error.message }));
+    }
+  };
+};
+
+// change user password
+export const ChangePassword = (oldPassword, newPassword) => {
+  console.log(oldPassword, newPassword);
+
+  return async (dispatch) => {
+    dispatch(updateUserStart());
+    const user = auth.currentUser;
+    const credential = EmailAuthProvider.credential(user.email, oldPassword);
+    try {
+      await reauthenticateWithCredential(user, credential)
+        .then(() => {
+          updatePassword(user, newPassword)
+            .then(() => {
+              dispatch(updatePasswordSuccess({ message: "Password updated successfully" }));
+            })
+            .catch((error) => {
+              console.log(error.message);
+              dispatch(updateUserError({ message: error.message }));
+            });
+        })
+        .catch((error) => {
+          console.log(error.message);
+          dispatch(updateUserError({ message: error.code }));
+        });
+    } catch (error) {
+      console.log(error.message);
+      dispatch(updateUserError({ message: error.message }));
+    }
+  };
+};
+
+
+
+// sign up 
+export const SignupMiddleware = (data) => {
+  return async (dispatch) => {
+    console.log(JSON.stringify(data, null, 2));
+
+    dispatch(signupStart());
+
+    try {
+      await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.confirmPassword
+      )
+        .then((u) => {
+          // create firebase doc for user
+          const userReference = doc(db, USERS, data.email);
+          setDoc(userReference, {
+            ...data,
+            created_at: new Date(),
+            updated_at: new Date(),
+            uid: u.user.uid,
+            status: "active",
+            role: "user",
+            image:
+              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTD0ig-MMf6uNZl4J7EZMFIyggEH3C-YVHAiw&usqp=CAU",
+          })
+            .then(() => {
+              dispatch(signupSuccess({ message: "success" }));
+            })
+            .catch((error) => {
+              const errorMessage = error.message;
+              dispatch(signupError({ message: error.code }));
+            });
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          dispatch(signupError({ message: error.code }));
+        });
+    } catch (error) {
+      console.log(error.message);
+      dispatch(signupError({ message: error.message }));
+    }
+  };
+}

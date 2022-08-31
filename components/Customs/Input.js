@@ -15,6 +15,7 @@ export const CustomInput = (props) => {
         size="lg"
         fontFamily={"regular"}
         placeholderTextColor={"#000"}
+        disabled={props.disabled}
       />
     </FormControl>
   );
@@ -23,7 +24,7 @@ export const CustomInput = (props) => {
 export const CustomTextArea = (props) => {
   const { label } = props;
 
-  <FormControl {...props}w='100%' bg='red.100' p={4}>
+  <FormControl {...props} w='100%' bg='red.100' p={4}>
     <FormControl.Label>{label}</FormControl.Label>
     <TextArea
       {...props}

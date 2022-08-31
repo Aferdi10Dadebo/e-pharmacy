@@ -72,7 +72,7 @@ export default function MessagesScreen(props) {
 
       <Box flex={1}>
         <FlashList
-          data={Object.keys(messages)}
+          data={messages ? Object.keys(messages) : []}
           estimatedItemSize={100}
           refreshControl={
             <RefreshControl refreshing={false} onRefresh={GetPageData} />
@@ -99,10 +99,9 @@ export default function MessagesScreen(props) {
                      *   the dot com part of the email for the object key.
                      *   same is done when creating the senders first sent message
                      */
-                    object_key: vendorMessages[item]?.sender_id.substring(
-                      0,
-                      vendorMessages[item]?.sender_id.length - 4
-                    ),
+                    object_key: vendorMessages[item]?.sender_id
+                      .substring(0, vendorMessages[item]?.sender_id.length - 4)
+                      .replace(/\./g, ""),
                     sender_id: vendorMessages[item]?.sender_id,
                   },
                 });

@@ -3,6 +3,12 @@ import { createSlice } from "@reduxjs/toolkit";
 const INITIAL_STATE = {
   ACTION_TYPE: "",
 
+  isAddProductLoading: false,
+  isUpdatingVendorLoading: false,
+
+  addProductMessage: "",
+  updateVendorMessage: "",
+
   vendorProducts: [],
   vendorOrders: [],
   vendorMessages: [],
@@ -21,13 +27,13 @@ export const VendorReducer = createSlice({
     getAllVendorProducts: (state, action) => {
       state.ACTION_TYPE = getAllVendorProducts.toString();
       state.vendorProducts = action.payload;
-      state.vendorProductCount = action.payload.length;
+      state.vendorProductCount = Object.keys(action.payload).length;
     },
 
     getAllVendorOrders: (state, action) => {
       state.ACTION_TYPE = getAllVendorOrders.toString();
       state.vendorOrders = action.payload;
-      state.vendorOrderCount = action.payload.length;
+      state.vendorOrderCount = Object.keys(action.payload).length;
     },
 
     getAllVendorMessages: (state, action) => {
@@ -41,6 +47,59 @@ export const VendorReducer = createSlice({
       state.vendorPromotions = action.payload;
       state.vendorPromotionCount = action.payload.length;
     },
+
+    createProductStart: (state) => {
+      state.ACTION_TYPE = createProductStart.toString();
+      state.isAddProductLoading = true;
+      state.addProductMessage = "";
+    },
+
+    createProductSuccess: (state, action) => {
+      state.ACTION_TYPE = createProductSuccess.toString();
+      state.isAddProductLoading = false;
+      state.addProductMessage = action.payload.message;
+    },
+
+    createProductError: (state, action) => {
+      state.ACTION_TYPE = createProductError.toString();
+      state.isAddProductLoading = false;
+      state.addProductMessage = action.payload.message;
+    },
+
+    updateVendorStart: (state) => {
+      state.ACTION_TYPE = updateVendorStart.toString();
+      state.isUpdatingVendorLoading = true;
+      state.updateVendorMessage = "";
+    },
+
+    updateVendorSuccess: (state, action) => {
+      state.ACTION_TYPE = updateVendorSuccess.toString();
+      state.isUpdatingVendorLoading = false;
+      state.updateVendorMessage = action.payload.message;
+    },
+
+    updateVendorError: (state, action) => {
+      state.ACTION_TYPE = updateVendorError.toString();
+      state.isUpdatingVendorLoading = false;
+      state.updateVendorMessage = action.payload.message;
+    },
+
+    resetActionType: (state, action) => {
+      state.ACTION_TYPE = "";
+    },
+
+    clearVendor: (state) => {
+      state.ACTION_TYPE = clearVendor.toString();
+      state.vendorProducts = [];
+      state.vendorOrders = [];
+      state.vendorMessages = [];
+      state.vendorPromotions = [];
+
+      state.vendorProductCount = 0;
+      state.vendorOrderCount = 0;
+      state.vendorMessageCount = 0;
+      state.vendorPromotionCount = 0;
+    },
   },
 });
 
@@ -50,6 +109,14 @@ export const {
   getAllVendorOrders,
   getAllVendorMessages,
   getAllVendorPromotions,
+  createProductStart,
+  createProductSuccess,
+  createProductError,
+  updateVendorStart,
+  updateVendorSuccess,
+  updateVendorError,
+  resetActionType,
+  clearVendor,
 } = VendorReducer.actions;
 
 export default VendorReducer.reducer;

@@ -24,7 +24,7 @@ export default function OrderDetailsScreen(props) {
   return (
     <Box flex={1}>
       <AppHeader
-        title={"Order Id"}
+        title={order.id}
         toggleDrawer={() => props.navigation.openDrawer()}
         hasBackButton
         onBackPress={() => {
@@ -35,8 +35,8 @@ export default function OrderDetailsScreen(props) {
       <ScrollView>
         {/* order status */}
         <Image
-          alt={order.order_item_name}
-          source={{ uri: order.order_item_image }}
+          alt={order.item_name}
+          source={{ uri: order.item_image }}
           style={{
             height: hp(30),
             width: "100%",
@@ -75,18 +75,18 @@ export default function OrderDetailsScreen(props) {
             ).toLocaleDateString()}`}
           />
           <OrderItem label="Order ID" value={order.id} />
-          <OrderItem label="Item Ordered" value={order.order_item_name} />
+          <OrderItem label="Item Ordered" value={order.item_name} />
           <OrderItem
             label="Quantity"
-            value={`${order.order_item_qty} ${order.order_item_qty_unit}`}
+            value={`${order.item_qty} ${order.item_qty_unit}`}
           />
           <OrderItem
             label="Cost Price"
             value={`${
-              parseInt(order.order_item_qty) * parseInt(order.order_item_price)
+              parseInt(order.item_qty) * parseInt(order.item_price)
             } GHS`}
           />
-          <OrderItem label="Ordered By" value={order.order_by_name} />
+          <OrderItem label="Ordered By" value={order.by} />
         </Stack>
       </ScrollView>
 

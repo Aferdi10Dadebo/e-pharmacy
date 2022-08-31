@@ -3,16 +3,13 @@ import {
   Box,
   Text,
   Center,
-  Button,
   Icon,
   Input,
   HStack,
-  IconButton,
   Image,
   Badge,
   Pressable,
   Stack,
-  Fab,
 } from "native-base";
 import { FlashList } from "@shopify/flash-list";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
@@ -28,7 +25,6 @@ import { OrderStatus } from "../../../constants/OderStatus";
 // redux
 import { useDispatch, useSelector } from "react-redux";
 import { GetVendorOrders } from "../../../redux/middleware/VendorMiddleware";
-import { Blend } from "@shopify/react-native-skia";
 
 export default function OrdersScreen(props) {
   const dispatch = useDispatch();
@@ -38,7 +34,7 @@ export default function OrdersScreen(props) {
   const [filterText, setFilterText] = React.useState("");
 
   // filter data and sort by date created
-  const filteredData = vendorOrders
+  const filteredData = [...Object.values(vendorOrders)]
     .filter((item) => {
       return (
         item?.order_item_name
@@ -73,7 +69,8 @@ export default function OrdersScreen(props) {
 
       {/* search part */}
       <Center>
-        {vendorOrders && vendorOrders.length > 0 ? (
+        {Object.values(vendorOrders) &&
+        Object.values(vendorOrders).length > 0 ? (
           <HStack p={5} space="3">
             <Input
               placeholder="Search for a product ordered"
@@ -128,8 +125,8 @@ export default function OrdersScreen(props) {
                 overflow="hidden"
               >
                 <Image
-                  alt={item.order_item_name}
-                  source={{ uri: item.order_item_image }}
+                  alt={item.item_name}
+                  source={{ uri: item.item_image }}
                   style={{
                     width: hp(10),
                     height: hp(12),
@@ -157,8 +154,8 @@ export default function OrdersScreen(props) {
                     alignItems="center"
                   >
                     <Box>
-                      <Text>{item.order_item_name}</Text>
-                      <Text fontSize="xs">by {item.order_by_name}</Text>
+                      <Text>{item.item_name}</Text>
+                      <Text fontSize="xs">by {item.by}</Text>
                     </Box>
                     <Badge
                       mr={2}

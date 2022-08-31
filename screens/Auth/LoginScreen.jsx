@@ -31,7 +31,7 @@ export default function LoginScreen(props) {
   const dispatch = useDispatch();
   const toast = useToast();
   const authState = useSelector((state) => state.auth);
-  const [email, setEmail] = React.useState("test@vendor.com");
+  const [email, setEmail] = React.useState("apps.fred.adu@gmail.com");
   const [password, setPassword] = React.useState("123456");
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -41,6 +41,7 @@ export default function LoginScreen(props) {
       toast.show({
         render: () => <ToastRender success message="Login Successful" />,
         placement: "top",
+        duration: 1000,
       });
       dispatch(resetActionType());
     } else if (authState.ACTION_TYPE === loginError.toString()) {
@@ -53,6 +54,7 @@ export default function LoginScreen(props) {
           />
         ),
         placement: "top",
+        duration:1000,
       });
       dispatch(resetActionType());
     }
@@ -144,6 +146,9 @@ export default function LoginScreen(props) {
               opacity: 0.3,
             }}
             alignItems="center"
+            onPress={() => {
+              props.navigation.navigate("RegisterScreen");
+            }}
           >
             <Text textAlign={"right"} color="text.500">
               Not a user yet? <Text color="blue.500">Register Now</Text>

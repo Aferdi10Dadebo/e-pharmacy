@@ -8,12 +8,14 @@ const INITIAL_STATE = {
   isLogoutLoading: false,
   isForgotPasswordLoading: false,
   isGetUserDetailsLoading: false,
+  isUpdateUserLoading: false,
 
   loginMessage: "",
   signupMessage: "",
   logoutMessage: "",
   forgotPasswordMessage: "",
   getUserDetailsMessage: "",
+  updateUserMessage: "",
 
   user: {},
 
@@ -122,6 +124,31 @@ export const AuthenticateMiddleware = createSlice({
       state.getUserDetailsMessage = action.payload.message;
     },
 
+    updateUserStart: (state) => {
+      state.ACTION_TYPE = updateUserStart.toString();
+      state.isUpdateUserLoading = true;
+      state.updateUserMessage = "";
+    },
+
+    updateUserSuccess: (state, action) => {
+      state.ACTION_TYPE = updateUserSuccess.toString();
+      state.isUpdateUserLoading = false;
+      state.updateUserMessage = action.payload.message;
+      state.user = action.payload.user;
+    },
+
+    updatePasswordSuccess: (state, action) => {
+      state.ACTION_TYPE = updatePasswordSuccess.toString();
+      state.isUpdateUserLoading = false;
+      state.updateUserMessage = action.payload.message;
+    },
+
+    updateUserError: (state, action) => {
+      state.ACTION_TYPE = updateUserError.toString();
+      state.isUpdateUserLoading = false;
+      state.updateUserMessage = action.payload.message;
+    },
+
     // resetActionType
     resetActionType: (state) => {
       state.ACTION_TYPE = "";
@@ -146,8 +173,11 @@ export const {
   getUserDetailsStart,
   getUserDetailsSuccess,
   getUserDetailsError,
+  updateUserStart,
+  updateUserSuccess,
+  updatePasswordSuccess,
+  updateUserError,
   resetActionType,
 } = AuthenticateMiddleware.actions;
-
 
 export default AuthenticateMiddleware.reducer;

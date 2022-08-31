@@ -9,7 +9,14 @@ import {
 import { FlashList } from "@shopify/flash-list";
 
 // firebase
-import { onSnapshot, query, where, updateDoc, doc } from "@firebase/firestore";
+import {
+  onSnapshot,
+  query,
+  where,
+  updateDoc,
+  doc,
+  collection,
+} from "@firebase/firestore";
 import {
   vendorMessagesRef,
   VENDOR_MESSAGES,
@@ -42,26 +49,46 @@ export default function ChatScreen(props) {
   //object key refs
   const unreadKey = `${object_key}.unread`;
   const user_key = `${object_key}`;
-  const vendor_key = `${user.email.substring(0, user.email.length - 4)}`;
+  const vendor_key = `${user?.email
+    ?.substring(0, user.email.length - 4)
+    .replace(/\./g, "")}`;
 
   // update local copy of data
   const GetPageData = React.useCallback(() => {
-    dispatch(GetVendorMessages(user.email));
+    dispatch(GetVendorMessages(user?.email));
   }, []);
 
-  // listen to realtime updates of messages
-  React.useEffect(() => {
-    const q = query(
-      vendorMessagesRef,
-      where(`${object_key}.sender_id`, "==", sender_id)
-    );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const newMessages = [];
-      snapshot.forEach((d) => {
-        newMessages.push(...d.data()[object_key].chat);
-      });
-      setMessages(newMessages);
+
+  // listen to realtime updates of messages
+  // React.useEffect(() => {
+  //   const q = query(
+  //     collection(db, VENDOR_MESSAGES),
+  //     where(`${object_key}.sender_id`, "==", sender_id)
+  //   );
+
+  //   const unsubscribe = onSnapshot(q, (snapshot) => {
+  //     const newMessages = [];
+  //     snapshot.forEach((d) => {
+  //       newMessages.push(...d.data()[object_key].chat);
+  //     });
+  //     setMessages(newMessages);
+  //     GetPageData();
+
+  //     // update read reciept
+  //     updateDoc(doc(db, VENDOR_MESSAGES, user.email), {
+  //       [`${unreadKey}`]: 0,
+  //     });
+  //   });
+
+  //   return () => unsubscribe();
+  // }, []);
+
+  React.useEffect(() => {
+    const unsub = onSnapshot(doc(db, VENDOR_MESSAGES, user.email), (d) => {
+      // console.log("Current data: ", d.data());
+
+      setMessages(d.data()[object_key].chat);
       GetPageData();
 
       // update read reciept
@@ -70,7 +97,7 @@ export default function ChatScreen(props) {
       });
     });
 
-    return () => unsubscribe();
+    return () => unsub();
   }, []);
 
   // send message
