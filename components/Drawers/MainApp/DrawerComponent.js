@@ -39,14 +39,14 @@ const menuData = [
   {
     icon: "briefcase",
     name: "Shop",
-    screen: "ProductStack",
+    screen: "StoreStack",
     key: "3",
   },
 
   {
     icon: "shopping-cart",
     name: "Cart",
-    screen: "OrderStack",
+    screen: "CartStack",
     key: "6",
   },
 
@@ -93,6 +93,17 @@ export default function DrawerComponent(props) {
         renderItem={({ item }) => (
           <DrawerItem
             onPress={() => {
+              if (item.screen === "StoreStack") {
+                props.navigation.navigate("StoreStack", {
+                  screen: "ProductsScreen",
+                });
+                return;
+              } else if (item.screen === 'CartStack') {
+                 props.navigation.navigate("CartStack", {
+                   screen: "CartScreen",
+                 });
+                 return;
+              }
               props.navigation.navigate(item.screen);
             }}
             icon={item.icon}

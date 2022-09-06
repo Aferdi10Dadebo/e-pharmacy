@@ -14,6 +14,7 @@ import AccountDetailsScreen from "../../screens/MainApp/Misc/AccountDetailsScree
 import MessageStack from "./MessageStack";
 import VendorStack from "./VendorStack";
 import StoreStack from "./StoreStack";
+import CartStack from "./CartStack";
 // import OrderStack from "./OrderStack";
 // import ProductStack from "./ProductStack";
 // import PromotionStack from "./PromotionStack";
@@ -49,11 +50,7 @@ export default function VendorNavigator() {
         />
         <Drawer.Screen name="VendorStack" component={VendorStack} />
         <Drawer.Screen name="StoreStack" component={StoreStack} />
-        {/*
-       
-
-        
-        <Drawer.Screen name="PromotionStack" component={PromotionStack} /> */}
+        <Drawer.Screen name="CartStack" component={CartStack} />
       </Drawer.Navigator>
     </NavigationContainer>
   );

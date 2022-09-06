@@ -160,11 +160,11 @@ export default function OrdersScreen(props) {
                     <Badge
                       mr={2}
                       bg={
-                        item.order_status === OrderStatus.PENDING_APPROVAL
+                        item.order_status === "Pending Approval"
                           ? "blue.300"
-                          : item.order_status === OrderStatus.APPROVED
-                          ? "green.400 "
-                          : " red.400"
+                          : item.order_status === "Approved"
+                          ? "green.400"
+                          : "red.400"
                       }
                     >
                       {item.order_status}

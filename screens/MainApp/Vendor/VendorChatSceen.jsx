@@ -19,60 +19,61 @@ import {
 } from "@firebase/firestore";
 import {
   vendorMessagesRef,
-  VENDOR_MESSAGES,
+  USER_MESSAGES,
   db,
 } from "../../../config/firebase-config";
 
 // redux
-import { useSelector, useDispatch } from "react-redux"; 
+import { useSelector, useDispatch } from "react-redux";
 
-import {
-  GetVendorMessages,
-  SendMessage,
-} from "../../../redux/middleware/VendorMiddleware";
+import { SendMessage } from "../../../redux/middleware/UserMiddleware";
 
 //  custom components
 import { AppHeader } from "../../../components/AppHeader";
 
-export default function ChatScreen(props) {
+export default function VendorChatSceen(props) {
   const dispatch = useDispatch();
-  const { sender, image, sender_id, object_key, state_messages } =
-    props.route.params;
+  const { vendor } = props.route.params;
   const { user } = useSelector((state) => state.auth);
-  const [messages, setMessages] = React.useState(state_messages);
+  const [messages, setMessages] = React.useState([]);
   const [chatData, setChatData] = React.useState({
     msg: "",
     sentAt: new Date(),
     sender_id: user.email,
   });
   const scrollViewRef = React.useRef(null);
+  const [mounted, setMounted] = React.useState(false);
 
-  //object key refs
-  const unreadKey = `${object_key}.unread`;
-  const user_key = `${object_key}`;
-  const vendor_key = `${user?.email
+  //   chat parameter
+  const vendor_name = vendor.name;
+  const vendor_image = vendor.image;
+  const sender_id = vendor.email;
+  const username = `${user.firstname} ${user.othername}`;
+
+  // object key refs
+  const object_key = `${vendor.email
+    ?.substring(0, vendor.email.length - 4)
+    .replace(/\./g, "")}`;
+  const sender_key = `${user?.email
     ?.substring(0, user.email.length - 4)
     .replace(/\./g, "")}`;
-
-  // update local copy of data
-  const GetPageData = React.useCallback(() => {
-    dispatch(GetVendorMessages(user?.email));
-  }, []);
-
-
+  const unreadKey = `${object_key}.unread`;
 
   // listen to realtime updates of messages
   React.useEffect(() => {
-    const unsub = onSnapshot(doc(db, VENDOR_MESSAGES, user.email), (d) => {
-      // console.log("Current data: ", d.data());
+    setMounted(false);
+    const unsub = onSnapshot(doc(db, USER_MESSAGES, user.email), (d) => {
+      //   console.log("Current data: ", d.data());
 
       setMessages(d?.data()[object_key]?.chat ?? []);
-      GetPageData();
 
-      // update read reciept
-      updateDoc(doc(db, VENDOR_MESSAGES, user.email), {
-        [`${unreadKey}`]: 0,
-      });
+      if (d.data()?.[object_key]?.name !== undefined) {
+        updateDoc(doc(db, USER_MESSAGES, user.email), {
+          [`${unreadKey}`]: 0,
+        });
+      }
+
+      setMounted(true);
     });
 
     return () => unsub();
@@ -88,9 +89,11 @@ export default function ChatScreen(props) {
       SendMessage(
         user.email,
         sender_id,
-        vendor_key,
-        user_key,
-        user.name,
+        object_key,
+        sender_key,
+        vendor_name,
+        vendor_image,
+        username,
         user.image,
         chatData
       )
@@ -105,7 +108,7 @@ export default function ChatScreen(props) {
   return (
     <Box flex={1}>
       <AppHeader
-        title={sender}
+        title={vendor_name}
         toggleDrawer={() => props.navigation.openDrawer()}
         hasBackButton
         onBackPress={() => {
@@ -124,9 +127,15 @@ export default function ChatScreen(props) {
             estimatedItemSize={100}
             showsVerticalScrollIndicator={false}
             ref={scrollViewRef}
-            onContentSizeChange={() =>
-              scrollViewRef.current.scrollToEnd({ animated: true })
-            }
+            onContentSizeChange={() => {
+              try {
+                if (mounted) {
+                  scrollViewRef.current.scrollToEnd({ animated: true });
+                }
+              } catch (error) {
+                console.log(error.message);
+              }
+            }}
             contentContainerStyle={{
               paddingVertical: 15,
             }}
@@ -136,12 +145,12 @@ export default function ChatScreen(props) {
                 {item?.sender_id !== user?.email && (
                   <HStack w={wp(70)} space={2} alignItems="flex-end">
                     <Image
-                      source={{ uri: image }}
+                      source={{ uri: vendor_image }}
                       h={7}
                       w={7}
                       resizeMode="cover"
                       borderRadius={5}
-                      alt={sender}
+                      alt={vendor_name}
                     />
                     <Box p={3} py={5} bg="white" rounded="md" flex={1}>
                       {item?.msg}
@@ -191,7 +200,7 @@ export default function ChatScreen(props) {
                       w={7}
                       resizeMode="cover"
                       borderRadius={5}
-                      alt={sender}
+                      alt={vendor_name}
                     />
                   </HStack>
                 )}

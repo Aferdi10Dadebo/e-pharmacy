@@ -92,14 +92,14 @@ export default function HomeScreen(props) {
             url="https://images.unsplash.com/photo-1577563908411-5077b6dc7624?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2340&q=80"
           />
 
-          <Card
+          {/* <Card
             value={vendorPromotionCount}
             title={"Promotions Requests"}
             onPress={() => {
               props.navigation.navigate("PromotionStack");
             }}
             url="https://images.unsplash.com/photo-1513757378314-e46255f6ed16?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTd8fGFkdmVydGlzZW1lbnR8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60"
-          />
+          /> */}
         </ScrollView>
       </Box>
     </Box>

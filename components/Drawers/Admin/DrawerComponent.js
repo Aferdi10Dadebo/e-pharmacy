@@ -41,12 +41,12 @@ const menuData = [
     key: "5",
   },
 
-  {
-    icon: "trending-up",
-    name: "Promotions",
-    screen: "PromotionsScreen",
-    key: "6",
-  },
+  // {
+  //   icon: "trending-up",
+  //   name: "Promotions",
+  //   screen: "PromotionsScreen",
+  //   key: "6",
+  // },
 ];
 
 // This is the component that renders the drawer navigator.

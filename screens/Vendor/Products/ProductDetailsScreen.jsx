@@ -238,7 +238,7 @@ export default function ProductDetailsScreen(props) {
         </KeyboardAwareScrollView>
 
         <HStack justifyContent="center" space={5} safeAreaBottom my={2} mx={10}>
-          <Button
+          {/* <Button
             // isLoading={vendorState.isAddProductLoading}
             isLoadingText="UPDATING ..."
             // onPress={onEditProduct}
@@ -247,7 +247,7 @@ export default function ProductDetailsScreen(props) {
             flex={1}
           >
             DELETE
-          </Button>
+          </Button> */}
 
           <Button
             isLoading={vendorState.isAddProductLoading}

@@ -6,6 +6,15 @@ import {
   createProductStart,
   createProductSuccess,
   createProductError,
+  approveOrderStart,
+  approveOrderSuccess,
+  approveOrderError,
+  declineOrderStart,
+  declineOrderSuccess,
+  declineOrderError,
+  deleteProductStart,
+  deleteProductSuccess,
+  deleteProductError,
 } from "../slices/VendorReducer";
 
 import {
@@ -16,6 +25,7 @@ import {
   VENDOR_PROMOTIONS,
   USER_MESSAGES,
   PRODUCTS,
+  USER_NOTIFICATIONS,
 } from "../../config/firebase-config";
 
 import { doc, getDoc, arrayUnion, writeBatch } from "firebase/firestore";
@@ -126,6 +136,8 @@ export const SendMessage = (
             chat: arrayUnion(chat),
             name: vendor_name,
             image: vendor_image,
+            sender_id: v_id,
+            unread: 1,
           },
         },
         {
@@ -183,6 +195,120 @@ export const CreateProduct = (id, product, productStore) => {
     } catch (error) {
       console.log(error.message);
       dispatch(createProductError({ message: error.message }));
+    }
+  };
+};
+
+export const ApproveOrder = (id, order_key, notification_key, order) => {
+  return async (dispatch) => {
+    dispatch(approveOrderStart());
+
+    try {
+      // Get a new write batch
+      const batch = writeBatch(db);
+
+      // store to vendorProducts
+      const orderRef = doc(db, VENDOR_ORDERS, id);
+
+      batch.update(orderRef, {
+        [`${order_key}.order_status`]: "Approved",
+      });
+
+      // notifcation
+      const notificationRef = doc(db, USER_NOTIFICATIONS, order.by_id);
+      batch.set(
+        notificationRef,
+        {
+          [`${notification_key}`]: {
+            order_on: order.order_on,
+            order_status: "Approved",
+            order_name: order.item_name,
+            order_price: order.item_price,
+            order_id: order.id,
+            date: new Date(),
+          },
+        },
+        {
+          merge: true,
+        }
+      );
+
+      // Commit the batch
+      await batch
+        .commit()
+        .then(() => {
+          dispatch(approveOrderSuccess({ message: "Order Approved" }));
+        })
+        .catch((err) => {
+          console.log(err.message);
+          dispatch(approveOrderError({ message: err.message }));
+        });
+    } catch (error) {
+      console.log(error.message);
+      dispatch(approveOrderError({ message: error.message }));
+    }
+  };
+};
+
+export const DeclineOrder = (id, order_key, notification_key, order) => {
+  return async (dispatch) => {
+    dispatch(declineOrderStart());
+
+    try {
+      // Get a new write batch
+      const batch = writeBatch(db);
+
+      // store to vendorProducts
+      const orderRef = doc(db, VENDOR_ORDERS, id);
+
+      batch.update(orderRef, {
+        [`${order_key}.order_status`]: "Rejected",
+      });
+
+      // notifcation
+      const notificationRef = doc(db, USER_NOTIFICATIONS, order.by_id);
+      batch.set(
+        notificationRef,
+        {
+          [`${notification_key}`]: {
+            order_on: order.order_on,
+            order_status: "Rejected",
+            order_name: order.item_name,
+            order_price: order.item_price,
+            order_id: order.id,
+            date: new Date(),
+          },
+        },
+        {
+          merge: true,
+        }
+      );
+
+      // Commit the batch
+      await batch
+        .commit()
+        .then(() => {
+          dispatch(declineOrderSuccess({ message: "Order Rejected" }));
+        })
+        .catch((err) => {
+          console.log(err.message);
+          dispatch(declineOrderError({ message: err.message }));
+        });
+    } catch (error) {
+      console.log(error.message);
+      dispatch(declineOrderError({ message: error.message }));
+    }
+  };
+};
+
+export const DeleteProduct = (id) => {
+  return async (dispatch) => {
+    try {
+      
+
+
+    } catch (error) {
+      console.log(error.message);
     }
   };
 };

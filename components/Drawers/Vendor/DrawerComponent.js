@@ -43,12 +43,12 @@ const menuData = [
     key: "3",
   },
 
-  {
-    icon: "trending-up",
-    name: "Promotion Request",
-    screen: "PromotionStack",
-    key: "5",
-  },
+  // {
+  //   icon: "trending-up",
+  //   name: "Promotion Request",
+  //   screen: "PromotionStack",
+  //   key: "5",
+  // },
 
   {
     icon: "shopping-cart",

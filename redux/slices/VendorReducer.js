@@ -4,10 +4,15 @@ const INITIAL_STATE = {
   ACTION_TYPE: "",
 
   isAddProductLoading: false,
+  isDeleteProductLoading: false,
   isUpdatingVendorLoading: false,
+  isApproveOrderLoading: false,
+  isADelcineOrderLoading: false,
 
   addProductMessage: "",
+  deleteProductMessage: "",
   updateVendorMessage: "",
+  orderMessage: "",
 
   vendorProducts: [],
   vendorOrders: [],
@@ -100,6 +105,60 @@ export const VendorReducer = createSlice({
       state.vendorMessageCount = 0;
       state.vendorPromotionCount = 0;
     },
+
+    approveOrderStart: (state) => {
+      state.ACTION_TYPE = approveOrderStart.toString();
+      state.isApproveOrderLoading = true;
+      state.orderMessage = "";
+    },
+
+    approveOrderSuccess: (state, action) => {
+      state.ACTION_TYPE = approveOrderSuccess.toString();
+      state.isApproveOrderLoading = false;
+      state.orderMessage = action.payload.message;
+    },
+
+    approveOrderError: (state, action) => {
+      state.ACTION_TYPE = approveOrderError.toString();
+      state.isApproveOrderLoading = false;
+      state.orderMessage = action.payload.message;
+    },
+
+    declineOrderStart: (state) => {
+      state.ACTION_TYPE = declineOrderStart.toString();
+      state.isADelcineOrderLoading = true;
+      state.orderMessage = "";
+    },
+
+    declineOrderSuccess: (state, action) => {
+      state.ACTION_TYPE = declineOrderSuccess.toString();
+      state.isADelcineOrderLoading = false;
+      state.orderMessage = action.payload.message;
+    },
+
+    declineOrderError: (state, action) => {
+      state.ACTION_TYPE = declineOrderError.toString();
+      state.isADelcineOrderLoading = false;
+      state.orderMessage = action.payload.message;
+    },
+
+    deleteProductStart: (state) => {
+      state.ACTION_TYPE = deleteProductStart.toString();
+      state.isDeleteProductLoading = true;
+      state.deleteProductMessage = "";
+    },
+
+    deleteProductSuccess: (state, action) => {
+      state.ACTION_TYPE = deleteProductSuccess.toString();
+      state.isDeleteProductLoading = false;
+      state.deleteProductMessage = action.payload.message;
+    },
+
+    deleteProductError: (state, action) => {
+      state.ACTION_TYPE = deleteProductError.toString();
+      state.isDeleteProductLoading = false;
+      state.deleteProductMessage = action.payload.message;
+    },
   },
 });
 
@@ -117,6 +176,15 @@ export const {
   updateVendorError,
   resetActionType,
   clearVendor,
+  approveOrderStart,
+  approveOrderSuccess,
+  approveOrderError,
+  declineOrderStart,
+  declineOrderSuccess,
+  declineOrderError,
+  deleteProductStart,
+  deleteProductSuccess,
+  deleteProductError,
 } = VendorReducer.actions;
 
 export default VendorReducer.reducer;
