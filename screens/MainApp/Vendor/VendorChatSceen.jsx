@@ -65,9 +65,10 @@ export default function VendorChatSceen(props) {
     const unsub = onSnapshot(doc(db, USER_MESSAGES, user.email), (d) => {
       //   console.log("Current data: ", d.data());
 
-      setMessages(d?.data()[object_key]?.chat ?? []);
+     
 
       if (d.data()?.[object_key]?.name !== undefined) {
+         setMessages(d?.data()[object_key]?.chat ?? []);
         updateDoc(doc(db, USER_MESSAGES, user.email), {
           [`${unreadKey}`]: 0,
         });
