@@ -246,7 +246,7 @@ export default function ProductDetailsScreen(props) {
             leftIcon={<Icon as={Feather} name="trash" />}
             flex={1}
           >
-            DELETE
+            DELETE 
           </Button> */}
 
           <Button
